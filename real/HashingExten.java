@@ -5,15 +5,26 @@ import java.util.ArrayList;
 public class HashingExten <E>{
 	protected int d; //Exponente con el cual inicia;
 	protected int bits;
+	protected int tPag;
 	protected ArrayList <Page<E>> paginas; 
 	public HashingExten(int a){
 		this.paginas=new ArrayList<Page<E>> ();
-		paginas.add(new Page<E>(a));
+		tPag=a;
+		paginas.add(new Page<E>(tPag));
 		paginas.get(0).setbDressH("0");
 		d=0;
 	}	
 	private int functionHash(int key){
 		return (int)(key%Math.pow(2,d));
+	}
+	
+	private void expHash(){
+		d++;
+		int exp=(int)(Math.pow(2,d)-(int)(Math.pow(2,d-1)));
+		for(int i=0;i<exp ;i++){
+			paginas.add(new Page<E>(tPag));
+		}
+		
 	}
 	
 	public void insert(int key, E reg) {
@@ -23,19 +34,53 @@ public class HashingExten <E>{
 		Registro<E> aux = new Registro<E>(key, reg);
 		int dressH = functionHash(key);
 		String bDressH= Integer.toBinaryString(dressH);
-		String bKey= Integer.toBinaryString(key);
 		if(paginas.get(dressH).registros.isEmpty()){
+			paginas.get(dressH).setbDressH(bDressH);
 			paginas.get(dressH).registros.add(aux);
 			}
-		else{
+		else if(!(paginas.get(dressH).registros.size()+1>paginas.get(0).tamaño)){
 			paginas.get(dressH).registros.add(aux);
 		}
-		
-		
+		else{
+			Page<E> auxPag= new Page<E> (tPag);
+
+			while(!(paginas.get(dressH).registros.isEmpty())){
+			int i=0;
+			auxPag.registros.add(paginas.get(dressH).registros.remove(i));	
+			}
+			expHash();
+			while(!(auxPag.registros.isEmpty())){
+				int j=0;
+				Registro<E> auxReg=auxPag.registros.remove(j);
+				insert(auxReg.key,auxReg.data);
+				}
+			}
 		}
 		else{
-			
-		}
+			Registro<E> aux = new Registro<E>(key, reg);
+			int dressH = functionHash(key);
+			String bDressH= Integer.toBinaryString(dressH);
+			if(paginas.get(dressH).registros.isEmpty()){
+				paginas.get(dressH).setbDressH(bDressH);
+				paginas.get(dressH).registros.add(aux);
+				}
+			else if(!(paginas.get(dressH).registros.size()+1>paginas.get(0).tamaño)){
+				paginas.get(dressH).registros.add(aux);
+			}
+			else{
+					Page<E> auxPag= new Page<E> (tPag);
+					while(!(paginas.get(dressH).registros.isEmpty())){
+					int i=0;
+					auxPag.registros.add(paginas.get(dressH).registros.remove(i));	
+					}
+					expHash();
+					while(!(auxPag.registros.isEmpty())){
+						int j=0;
+						Registro<E> auxReg=auxPag.registros.remove(j);
+						insert(auxReg.key,auxReg.data);
+						}
+					}
+				}
 		}
 		else{
 			System.out.println("Codigo repetido");
@@ -86,7 +131,7 @@ public class HashingExten <E>{
 		}
 		else{
 		for (Page<E> pag : paginas) {
-			s+=Integer.toBinaryString(i)+"---->\t"+pag+"\n";
+			s+=Integer.toBinaryString(i)+"---->\t"+pag.bDressH+pag+"\n";
 			i++;
 		}
 		return s;

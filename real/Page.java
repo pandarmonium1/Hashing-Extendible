@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 public class Page <E>{
 	protected String bDressH;
+	protected int dPrima;
+	protected int dressH;
 	protected int tamaño;
 	protected ArrayList <Registro<E>> registros;
 	protected double densidad;
@@ -34,6 +36,10 @@ public class Page <E>{
 	public double getDensidad() {
 		return densidad;
 	}
+	public void updateDensidad(int r, int n) {
+		this.densidad = (double) (r/n);
+	}
+	
 	public void setDensidad(double densidad) {
 		this.densidad = densidad;
 	}
@@ -45,7 +51,7 @@ public class Page <E>{
 			return s;
 		}
 		for (Registro<E> reg : registros) {
-			s+=reg+"\n";
+			s+=reg+"||";
 		}
 		return s;
 		}

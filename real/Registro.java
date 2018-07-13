@@ -13,6 +13,7 @@ public class Registro<E> implements Comparable<Registro<E>> {
 		data = register;
 	}
 	
+	
 	public void setKey(int k){
 		key = k;
 	}

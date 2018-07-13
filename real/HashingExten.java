@@ -3,10 +3,12 @@ package real;
 import java.util.ArrayList;
 
 public class HashingExten <E>{
-	protected int d; //Exponente con el cual inicia;
-	protected int bits;
+	
+	protected int d; 
 	protected int tPag;
-	protected ArrayList <Page<E>> paginas; 
+	protected ArrayList <Page<E>> paginas;
+	
+	
 	public HashingExten(int a){
 		this.paginas=new ArrayList<Page<E>> ();
 		tPag=a;
@@ -118,41 +120,113 @@ public class HashingExten <E>{
 			}
 		}
 		
-	private E searchData(int key) {
+	public E searchData(int key) {
 		int dressH = functionHash(key);
 		String bKey= Integer.toBinaryString(key);
-		if(paginas.get(dressH).registros.contains(bKey)){
+		if(paginas.get(dressH).registros.contains(new Registro(key,null))){
 			for(int i=0;i<paginas.get(dressH).registros.size();i++){
-				if(paginas.get(dressH).registros.get(i).getBKey().equals(bKey))
+				if(paginas.get(dressH).registros.get(i).getBKey().equals(bKey)){
 					return paginas.get(dressH).registros.get(i).data;
+				}
 			}
 		}
-		else return null;
+		else { 
+			return null;
+		}
 		
 		return null;
 	}
 	
-	public void searchCod(int key) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	public void delete(int key) {
-		// TODO Auto-generated method stub
+		if(searchData(key)==null){
+			System.out.println("No existe la clave en el Hash");
+		}
+		else{
+			int dressH = functionHash(key);
+			String bKey= Integer.toBinaryString(key);
+			paginas.get(dressH).registros.remove(paginas.get(dressH).posKey(key));
+			paginas.get(dressH).updateDensidad(paginas.get(dressH).registros.size(), tPag);
+			contHash(dressH);
+			}
+		}
+		
+	
+	private ArrayList<Boolean> iniCarga(){
+	ArrayList<Boolean> aptos = new ArrayList<Boolean>();
+	int comp=0;
+		for(int i=0, j=1; i<this.paginas.size()&&j<this.paginas.size();i++,j++){
+			paginas.get(i).updateDensidad(paginas.get(i).registros.size(), tPag);
+			if(paginas.get(i).densidad<=0.5)
+				comp++;
+			if(paginas.get(j-1).dPrima==paginas.get(j).dPrima)
+				comp++;
+			if(paginas.get(j).bDressH.indexOf(paginas.get(j-1).bDressH)!=-1 ||
+					paginas.get(j-1).bDressH.indexOf(paginas.get(j).bDressH)!=-1)
+				comp++;
+			if(comp==3)
+				aptos.add(true);
+			else aptos.add(false);
+			comp=0;
+		}
+		
+		return aptos;
+		
 		
 	}
-
+	
+	private boolean AllPrimas(){
+		Boolean contr=true;
+		for(int i=0;i<paginas.size();i++){
+			if(paginas.get(i).dPrima==d)
+				contr=false;
+		}
+		return contr;
+	}
+	
+	private void contHash(int dressH){
+		ArrayList<Boolean> aptosUnion= iniCarga();
+		for(int i=0;i<aptosUnion.size();i++){
+			//UNION
+			if(aptosUnion.get(i)){
+				Page<E> auxPag= new Page<E> (tPag);
+				Page<E> pagDiv=paginas.get(i);
+				while(!(pagDiv.registros.isEmpty())){
+					int a=0;
+					auxPag.registros.add(pagDiv.registros.remove(a));	
+				}
+				pagDiv=paginas.get(dressH);
+				while(!(pagDiv.registros.isEmpty())){
+					int a=0;
+					auxPag.registros.add(pagDiv.registros.remove(a));	
+				}
+				paginas.get(i).registros=pagDiv.registros;
+				pagDiv.dPrima--;
+				while(!(auxPag.registros.isEmpty())){
+					int j=0;
+					Registro<E> auxReg=auxPag.registros.remove(j);
+					insert(auxReg.key,auxReg.data);
+				}				
+			}		
+		}
+		Boolean aptoCont= AllPrimas();
+		if(aptoCont){
+				
+		}
+		
+	}
 	
 	public String toString(){
 		String s = "Indice\tBinary Dress\t\tData \n";
 		int i=0;
+		
 		if(d==0&&paginas.size()<=0){
 			s +=  "empty\n";
 			return s;
 		}
 		else{
 		for (Page<E> pag : paginas) {
-			s+=Integer.toBinaryString(i)+"---->\t"+pag.bDressH+pag+"\n";
+			s+=Integer.toBinaryString(i)+"-->\t"+pag.bDressH+pag+"\n";
 			i++;
 		}
 		return s;

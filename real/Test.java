@@ -41,45 +41,12 @@ public class Test {
 		System.out.println(alumnos);
 		alumnos.insert(42, new Alumno(42,"Juan16"));
 		System.out.println(alumnos);
-		
-		/*while (true){
-			System.out.println("***************");
-			System.out.println("Funcion a realizar:" +"\n" +"1.Ingresar"+ "\n" +"2.Buscar"+"\n"+"3.Eliminar"+"\n"+"4.Mostrar"+"\n"+"5.Salir");
-			opt = scan.nextInt();
-			System.out.println("***************");
-			if(opt == 1){
-				Alumno nuevo;
-				System.out.println("Ingrese Codigo: ");
-				int cod = scan.nextInt();
-				System.out.println("Ingrese Nombre");
-				String name = scan.next();
-				nuevo = new Alumno(cod,name);
-				alumnos.insert(cod, nuevo);
-			
-			}
-			
-			if(opt == 2){
-				System.out.println("Ingrese DNI a buscar:");
-				int cod = scan.nextInt();
-				alumnos.searchCod(cod);
-
-			}
-			if(opt == 3){
-				System.out.println("Ingrese DNI a eliminar:");
-				int eliminar = scan.nextInt();
-				alumnos.delete(eliminar);
-			}
-			if(opt == 4){
-				System.out.println("Tabla hashing extensible");
-				System.out.println(alumnos);
-			}
-			if (opt == 5){
-				System.out.println("Hasta Pronto");
-				break;
-			}
+		System.out.println(alumnos.searchData(22));
+		//alumnos.delete(22);
+		System.out.println(alumnos.searchData(22));
+		System.out.println(alumnos);
 			
 		}
-*/	}
 
 
 }

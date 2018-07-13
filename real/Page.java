@@ -20,6 +20,13 @@ public class Page <E>{
 		registros=new ArrayList<Registro<E>>();
 	}
 	
+	public int posKey(int key) {
+		for(int i=0;i<registros.size();i++){
+			if(registros.get(i).key==key)
+				return i;
+		}
+		return -1;
+	}
 	
 	public String getbDressH() {
 		return bDressH;

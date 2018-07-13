@@ -42,7 +42,7 @@ public class Test {
 		alumnos.insert(42, new Alumno(42,"Juan16"));
 		System.out.println(alumnos);
 		System.out.println(alumnos.searchData(22));
-		//alumnos.delete(22);
+		alumnos.delete(22);
 		System.out.println(alumnos.searchData(22));
 		System.out.println(alumnos);
 			

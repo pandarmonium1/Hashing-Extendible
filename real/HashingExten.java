@@ -152,26 +152,35 @@ public class HashingExten <E>{
 		}
 		
 	
-	private ArrayList<Boolean> iniCarga(){
-	ArrayList<Boolean> aptos = new ArrayList<Boolean>();
+	private ArrayList<Integer> iniCarga(){
+	ArrayList<Integer> aptos = new ArrayList<Integer>(paginas.size());
 	int comp=0;
+	int pareja=1;
+	for(int i=0;i<this.paginas.size();i++){
+	paginas.get(i).updateDensidad(paginas.get(i).registros.size(), tPag);
+	}
 		for(int i=0, j=1; i<this.paginas.size()&&j<this.paginas.size();i++,j++){
-			paginas.get(i).updateDensidad(paginas.get(i).registros.size(), tPag);
-			if(paginas.get(i).densidad<=0.5)
-				comp++;
-			if(paginas.get(j-1).dPrima==paginas.get(j).dPrima)
-				comp++;
-			if(paginas.get(j).bDressH.indexOf(paginas.get(j-1).bDressH)!=-1 ||
-					paginas.get(j-1).bDressH.indexOf(paginas.get(j).bDressH)!=-1)
-				comp++;
-			if(comp==3)
-				aptos.add(true);
-			else aptos.add(false);
-			comp=0;
+			for(int k=1;i<this.paginas.size();k++){
+				if(paginas.get(i).densidad<=0.5&&paginas.get(k).densidad<=0.5)
+					comp++;
+				if(paginas.get(k).dPrima==paginas.get(i).dPrima)
+					comp++;
+				if(paginas.get(k).bDressH.indexOf(paginas.get(i).bDressH)>=paginas.get(i).bDressH.length() ||
+						paginas.get(k).bDressH.indexOf(paginas.get(i).bDressH)>=paginas.get(k).bDressH.length())
+					comp++;
+				if(comp==3){
+					aptos.set(i,pareja);
+					aptos.set(k,pareja);
+					pareja++;
+				}
+				comp=0;
+			}
+			if(aptos.get(i)==null)
+				aptos.set(i,0);
 		}
 		
 		return aptos;
-		
+	
 		
 	}
 	
@@ -185,17 +194,18 @@ public class HashingExten <E>{
 	}
 	
 	private void contHash(int dressH){
-		ArrayList<Boolean> aptosUnion= iniCarga();
+		ArrayList<Integer> aptosUnion= iniCarga();
 		for(int i=0;i<aptosUnion.size();i++){
 			//UNION
-			if(aptosUnion.get(i)){
+			if(aptosUnion.get(i)!=0){
+				int posPareja= aptosUnion.lastIndexOf(aptosUnion.get(i));
 				Page<E> auxPag= new Page<E> (tPag);
 				Page<E> pagDiv=paginas.get(i);
 				while(!(pagDiv.registros.isEmpty())){
 					int a=0;
 					auxPag.registros.add(pagDiv.registros.remove(a));	
 				}
-				pagDiv=paginas.get(dressH);
+				pagDiv=paginas.get(posPareja);
 				while(!(pagDiv.registros.isEmpty())){
 					int a=0;
 					auxPag.registros.add(pagDiv.registros.remove(a));	
@@ -211,11 +221,24 @@ public class HashingExten <E>{
 		}
 		Boolean aptoCont= AllPrimas();
 		if(aptoCont){
+			d--;
+			int a=0; 
+			for(int i=0;i<paginas.size();i++){
+				if((i<=d)){
+					paginas.get(i).registros=paginas.get(a).registros;
+					a=+d;
+				}
+				else{
+					paginas.remove(i);
+				}
 				
+			}
 		}
-		
 	}
+			
+		
 	
+
 	public String toString(){
 		String s = "Indice\tBinary Dress\t\tData \n";
 		int i=0;

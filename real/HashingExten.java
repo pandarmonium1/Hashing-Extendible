@@ -41,6 +41,12 @@ public class HashingExten <E>{
 				
 			}
 		}
+		
+			for(int j=0;j<paginas.size()-1 ;j++){
+				if(paginas.get(j).dPrima<d&&paginas.get(j+1).dPrima<d)
+					paginas.get(j+1).registros=paginas.get(j).registros;
+			}
+		
 	
 		while(!(auxPag.registros.isEmpty())){
 			int j=0;
@@ -66,7 +72,7 @@ public class HashingExten <E>{
 			paginas.get(dressH).registros.add(aux);
 		}
 		else{
-			
+			paginas.get(dressH).registros.add(aux);	
 			expHash(dressH);
 			}
 		}
@@ -86,19 +92,9 @@ public class HashingExten <E>{
 		}
 		else{
 			System.out.println("Codigo repetido");
+			}
 		}
-		}
-		/*if (paginas.get(dressH).registros.isEmpty()) {
 		
-			paginas.get(dressHash).dressH = dressHash;
-			paginas.get(dressHash).registros.add(aux);
-		} else {
-			if (paginas.get(dressHash).registros.search(aux) == false)
-				paginas.get(dressHash).registros.add(0,aux);
-			else
-				System.out.println(key + " ya fue insertada antes...");
-		}*/
-	
 	private E searchData(int key) {
 		int dressH = functionHash(key);
 		String bKey= Integer.toBinaryString(key);

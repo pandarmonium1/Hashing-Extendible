@@ -23,17 +23,19 @@ public class Test {
 		
 		
 		
-		alumnos.insert(12, new Alumno(12,"Juan6"));
-		
-		
+		alumnos.insert(11, new Alumno(12,"Juan6"));
 		
 		System.out.println(alumnos);
+		
+
 		alumnos.insert(22, new Alumno(22,"Juan7"));
 		alumnos.insert(24, new Alumno(24,"Juan8"));
 		alumnos.insert(28, new Alumno(28,"Juan9"));
+		System.out.println(alumnos);
 		alumnos.insert(29, new Alumno(29,"Juan10"));
 		alumnos.insert(31, new Alumno(31,"Juan11"));
 		alumnos.insert(32, new Alumno(32,"Juan12"));
+		alumnos.insert(34, new Alumno(34,"Juan12"));
 		System.out.println(alumnos);
 		
 		/*while (true){

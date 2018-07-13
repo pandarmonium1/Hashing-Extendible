@@ -12,7 +12,6 @@ public class Test {
 //		int tamPag = scan.nextInt();
 		
 		HashingExten<Alumno> alumnos = new HashingExten<Alumno>(5);
-		int opt=0;;
 		
 		alumnos.insert(9, new Alumno(9,"Juan1"));
 		alumnos.insert(10, new Alumno(10,"Juan2"));
@@ -26,18 +25,15 @@ public class Test {
 		
 		alumnos.insert(12, new Alumno(12,"Juan6"));
 		
-		//ACA TENGO UN PROBLEMA PARA CUANDO TRABAJO DE A MAS DE 2ELEVADO  A 3, PERO ESTA BIEN LA PRIMERA EXPANSION, 
-		//Trabaja con eso, para el delete y el search, q te devuelva registro, ya tengo un search Data ahi, creo q 
-		//Llegare a las 10 por ahi creo, ahmmm bno me avisas q avanzas si 
 		
 		
 		System.out.println(alumnos);
-		alumnos.insert(22, new Alumno(22,"Juan3"));
-		alumnos.insert(24, new Alumno(24,"Juan4"));
-		alumnos.insert(28, new Alumno(28,"Juan5"));
-		alumnos.insert(29, new Alumno(29,"Juan3"));
-		alumnos.insert(31, new Alumno(31,"Juan4"));
-		alumnos.insert(32, new Alumno(32,"Juan5"));
+		alumnos.insert(22, new Alumno(22,"Juan7"));
+		alumnos.insert(24, new Alumno(24,"Juan8"));
+		alumnos.insert(28, new Alumno(28,"Juan9"));
+		alumnos.insert(29, new Alumno(29,"Juan10"));
+		alumnos.insert(31, new Alumno(31,"Juan11"));
+		alumnos.insert(32, new Alumno(32,"Juan12"));
 		System.out.println(alumnos);
 		
 		/*while (true){

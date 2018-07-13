@@ -14,6 +14,12 @@ public class Page <E>{
 		tamaño=m;
 		registros=new ArrayList<Registro<E>>();
 	}
+	public Page(int m, int dPrima){
+		this.dPrima=dPrima;
+		tamaño=m;
+		registros=new ArrayList<Registro<E>>();
+	}
+	
 	
 	public String getbDressH() {
 		return bDressH;
@@ -50,6 +56,7 @@ public class Page <E>{
 			s+="Its Empty";
 			return s;
 		}
+		s+="\t("+dPrima+")\t";
 		for (Registro<E> reg : registros) {
 			s+=reg+"||";
 		}

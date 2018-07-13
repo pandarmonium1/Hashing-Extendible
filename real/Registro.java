@@ -41,7 +41,7 @@ public class Registro<E> implements Comparable<Registro<E>> {
 		return false;
 	}
 	public String toString(){
-		return bKey+ ":\t\t" + this.data.toString(); 
+		return bKey+ ":\t" + this.data.toString(); 
 	}
 	
 

@@ -17,12 +17,17 @@ public class HashingExten <E>{
 	private int functionHash(int key){
 		return (int)(key%Math.pow(2,d));
 	}
+	private int functionHash(int key,int exp){
+		return (int)(key%Math.pow(2,exp));
+	}
 	
 	private void expHash(int dressH){
+		//EVALUAREMOS SI DIVIDIMOS O EXPANDIMOS
+		if(paginas.get(dressH).dPrima==d){
 		d++;
 		Page<E> auxPag= new Page<E> (tPag);
 		Page<E> pagFull=paginas.get(dressH);
-		Page<E> pagNueva=new Page<E> (tPag);;
+		Page<E> pagNueva=new Page<E> (tPag);
 		pagFull.dPrima=d;
 		while(!(pagFull.registros.isEmpty())){
 			int i=0;
@@ -33,27 +38,45 @@ public class HashingExten <E>{
 		
 		for(int i=0;i<exp ;i++){
 			if(i==dressH){
-				paginas.add(dressH+1,pagNueva);
+				paginas.add(pagNueva);
 				pagNueva.dPrima=d;
 			}
 			else {
 				paginas.add(new Page<E>(tPag,d-1));
-				
+				paginas.get(paginas.size()-1).dressH=paginas.size()-1;
+				paginas.get(paginas.size()-1).bDressH=Integer.toBinaryString(paginas.size()-1);
 			}
 		}
-		
-			for(int j=0;j<paginas.size()-1 ;j++){
-				if(paginas.get(j).dPrima<d&&paginas.get(j+1).dPrima<d)
-					paginas.get(j+1).registros=paginas.get(j).registros;
-			}
-		
-	
+
 		while(!(auxPag.registros.isEmpty())){
 			int j=0;
 			Registro<E> auxReg=auxPag.registros.remove(j);
 			insert(auxReg.key,auxReg.data);
 			}
 		
+			for(int j=0;j<paginas.size() ;j++){
+				if(paginas.get(j).dPrima<d&&paginas.get(j).registros.isEmpty())
+					paginas.get(j).registros=paginas.get(functionHash(paginas.get(j).dressH,d-1)).registros;
+			}
+		}
+		else{
+			
+			Page<E> auxPag=new Page<E> (tPag);
+			Page<E> pagFull=paginas.get(dressH);
+			pagFull.dPrima++;
+			paginas.get(functionHash(dressH,d-1)).dPrima++;
+			while(!(pagFull.registros.isEmpty())){
+				int i=0;
+				auxPag.registros.add(pagFull.registros.remove(i));	
+			}
+			pagFull.registros=new ArrayList<Registro<E>>();
+			while(!(auxPag.registros.isEmpty())){
+				int j=0;
+				Registro<E> auxReg=auxPag.registros.remove(j);
+				insert(auxReg.key,auxReg.data);
+			}
+			
+		}
 	}
 	
 	public void insert(int key, E reg) {
